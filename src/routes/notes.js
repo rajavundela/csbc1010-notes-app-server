@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { validateNoteArray } = require('../utils/validators')
+const Note = require('../models/note.js');
 
 /* ------------------------ TODO-3 - Fetch All Notes ------------------------ */
 router.get('/', (req, res) => {
@@ -15,12 +16,42 @@ router.get('/', (req, res) => {
         [{ id, text, dateCreated, lastModified }]
   */
 
-  /*
+        let myPromise = new Promise(function(myResolve, myReject) {
+          // "Producing Code" (May take some time)
+          
+            myResolve(); // when successful
+            myReject();  // when error
+          });
+          
+          // "Consuming Code" (Must wait for a fulfilled Promise)
+          myPromise.then(
+            function(value) { /* code if successful */ },
+            function(error) { /* code if some error */ }
+          );
 
     // Your code here...
-
-    const notes = [] // this is the response object, make sure to replace with actual value
-
+    var notes = [];// this is the response object, make sure to replace with actual value
+    addValues = function(allNotes){
+      for(let i = 0; i < allNotes.length;  i++){
+        const note = {
+          id : allNotes[i]._id.toString(),
+          text: allNotes[i].content,
+          dateCreated: allNotes[i].dateCreated.toISOString().split('T')[0],
+          lastModified: allNotes[i].lastModified.toISOString().split('T')[0]
+        }
+        if (i === notes.length) 
+        {notes.push(note);
+        console.log(note);}
+    }
+  }
+    Note.find().then(function(allNotes){
+        addValues(allNotes);
+      }
+    );
+    // notes.push({}, {})
+    console.log(notes);
+    // const newNote = {id: note._id.toString(), text: note.content, dateCreated: note.dateCreated.toISOString().split('T')[0], lastModified: note.lastModified.toISOString().split('T')[0]}; // this is the response object, make sure to replace with actual value
+    
 
 
     // Upon succ, run the following lines to validate the response object and respond to client
@@ -40,20 +71,20 @@ router.get('/', (req, res) => {
     res.status(500).send('Fail to query')
     // --- end of fail flow ---
     
-  */
+  
 
 
 
   // TODO-3.1: Remove this section once you start working on TODO-3
   // --- Remove section begins ---
-  const notes = [ 
-    { id: 11, text: 'This is dummy note from fetch all!', dateCreated: '2021-04-15', lastModified: '2021-04-17' },
-    { id: 12, text: 'This is another dummy note from fetch all!', dateCreated: '2021-09-15', lastModified: '2021-10-17' }
-  ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
+  // const notes = [ 
+  //   { id: 11, text: 'This is dummy note from fetch all!', dateCreated: '2021-04-15', lastModified: '2021-04-17' },
+  //   { id: 12, text: 'This is another dummy note from fetch all!', dateCreated: '2021-09-15', lastModified: '2021-10-17' }
+  // ]
+  // if (!validateNoteArray(notes)) {
+  //   res.status(500).send('Invalid data type')
+  // }
+  // res.send({ notes })
   // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */

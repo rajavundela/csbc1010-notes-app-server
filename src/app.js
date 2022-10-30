@@ -27,10 +27,15 @@ app.use(express.urlencoded({ extended: true }))
 /*
   TODO-1: Settup Database connection
 */
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/notes-app')
 
 /*
   TODO-2: Upon database connection success, create the relavent table(s) if it does not exist.
 */
+
+
+
 
 app.get('/', (req, res) => {
   res.send('CSBC1010 Assignment 3 - My Notes')
