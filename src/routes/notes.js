@@ -3,6 +3,10 @@ const router = express.Router()
 const { validateNoteArray } = require('../utils/validators')
 const Note = require('../models/note.js');
 
+const controllerNotes = require('../controllers/note.js');
+
+// router.get('/', controllerNotes.findAll);
+
 /* ------------------------ TODO-3 - Fetch All Notes ------------------------ */
 router.get('/', (req, res) => {
   console.log(`[GET] http://localhost:${global.port}/notes - Fetching all notes`)
@@ -16,22 +20,10 @@ router.get('/', (req, res) => {
         [{ id, text, dateCreated, lastModified }]
   */
 
-        let myPromise = new Promise(function(myResolve, myReject) {
-          // "Producing Code" (May take some time)
-          
-            myResolve(); // when successful
-            myReject();  // when error
-          });
-          
-          // "Consuming Code" (Must wait for a fulfilled Promise)
-          myPromise.then(
-            function(value) { /* code if successful */ },
-            function(error) { /* code if some error */ }
-          );
 
     // Your code here...
-    var notes = [];// this is the response object, make sure to replace with actual value
-    addValues = function(allNotes){
+    Note.find().then(function(allNotes){
+      var notes = [] // this is the response object, make sure to replace with actual value
       for(let i = 0; i < allNotes.length;  i++){
         const note = {
           id : allNotes[i]._id.toString(),
@@ -39,39 +31,17 @@ router.get('/', (req, res) => {
           dateCreated: allNotes[i].dateCreated.toISOString().split('T')[0],
           lastModified: allNotes[i].lastModified.toISOString().split('T')[0]
         }
-        if (i === notes.length) 
-        {notes.push(note);
-        console.log(note);}
-    }
-  }
-    Note.find().then(function(allNotes){
-        addValues(allNotes);
+        notes.push(note);
+        }
+        // console.log(notes);
+        res.send({ notes })
       }
-    );
-    // notes.push({}, {})
-    console.log(notes);
-    // const newNote = {id: note._id.toString(), text: note.content, dateCreated: note.dateCreated.toISOString().split('T')[0], lastModified: note.lastModified.toISOString().split('T')[0]}; // this is the response object, make sure to replace with actual value
-    
+    ).catch(err => {
+      res.status(500).send({
+          message: err.message || "An Error occurred while retrieving all Notes."
+      });
+  });
 
-
-    // Upon succ, run the following lines to validate the response object and respond to client
-
-    // --- begin of succ flow ---
-    if (!validateNoteArray(notes)) {
-      res.status(500).send('Invalid data type')
-    }
-    res.send({ notes })
-    // --- end of succ flow ---
-
-
-
-    // Upon fail, run the following line to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to query')
-    // --- end of fail flow ---
-    
-  
 
 
 
@@ -88,6 +58,7 @@ router.get('/', (req, res) => {
   // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
+
 
 /* ------------------------- TODO-7 - Search Notes -------------------------- */
 router.get('/search/:searchKey', (req, res) => {
@@ -107,6 +78,26 @@ router.get('/search/:searchKey', (req, res) => {
   const searchKey = req.params.searchKey
   console.log(searchKey)
  
+
+  Note.find({'content': {'$regex': searchKey, '$options': 'i'}}).then(function(searchNotes){
+    var notes = [] // this is the response object, make sure to replace with actual value
+    for(let i = 0; i < searchNotes.length;  i++){
+      const note = {
+        id : searchNotes[i]._id.toString(),
+        text: searchNotes[i].content,
+        dateCreated: searchNotes[i].dateCreated.toISOString().split('T')[0],
+        lastModified: searchNotes[i].lastModified.toISOString().split('T')[0]
+      }
+      notes.push(note);
+      }
+      // console.log(notes);
+      res.send({ notes })
+    }
+  ).catch(err => {
+    res.status(500).send({
+        message: err.message || "An Error occurred while retrieving search Notes."
+    });
+});
   /*
 
     // Your code here...
@@ -137,11 +128,11 @@ router.get('/search/:searchKey', (req, res) => {
 
   // TODO-7.1: Remove this line once you start working on TODO-7
   // --- Remove section begins ---
-  const notes = [ { id: 5, text: `This is a dummy note from search contains search key ${searchKey}!`, dateCreated: '2021-04-15', lastModified: '2021-04-17' } ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
+  // const notes = [ { id: 5, text: `This is a dummy note from search contains search key ${searchKey}!`, dateCreated: '2021-04-15', lastModified: '2021-04-17' } ]
+  // if (!validateNoteArray(notes)) {
+  //   res.status(500).send('Invalid data type')
+  // }
+  // res.send({ notes })
   // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
