@@ -34,7 +34,7 @@ mongoose.connect('mongodb://localhost:27017/notes-app')
   TODO-2: Upon database connection success, create the relavent table(s) if it does not exist.
 */
 
-
+// Done ToDo-2 in ../models/note.js
 
 
 app.get('/', (req, res) => {

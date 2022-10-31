@@ -146,11 +146,10 @@ router.delete('/', (req, res) => {
 		  Note id is stored in variable noteId 
 	*/
 	const noteId = req.body.id
-
-  /*
+  
 
     // Your code here...
-
+    Note.findByIdAndRemove(noteId).exec();
 
 
     // Upon succ, run the following lines to validate the response object and respond to client
@@ -167,13 +166,13 @@ router.delete('/', (req, res) => {
     res.status(500).send('Fail to delete')
     // --- end of fail flow ---
 
-  */
+  
 
 
 
   // TODO-6.1: Remove this section once you start working on TODO-6
   // --- Remove section begins ---
-  res.send()
+  // res.send()
   // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */

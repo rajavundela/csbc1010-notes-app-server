@@ -155,10 +155,14 @@ router.delete('/', (req, res) => {
       Delete all notes from the database
   */
 
-  /*
+  
 
     // Your code here...
-
+    Note.deleteMany( {} ).then(function(){
+      console.log("Data deleted"); // Success
+    }).catch(function(error){
+        console.log(error); // Failure
+    });
 
 
     // Upon succ, run the following lines to validate the response object and reponse to client
@@ -175,13 +179,13 @@ router.delete('/', (req, res) => {
     res.status(500).send('Fail to delete')
     // --- end of fail flow ---
 
-  */
+  
 
 
 
   // TODO-8.1: Remove this section once you start working on TODO-8
   // --- Remove section begins ---
-  res.send()
+  // res.send()
   // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
